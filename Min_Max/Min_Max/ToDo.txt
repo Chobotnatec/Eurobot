@@ -1,0 +1,115 @@
+//finding moves
+********************************************************
+TO DO:
+
+-napsat tøídu item X
+-napsat tøídu state X
+-napsat tøídu move X
+-uprava vstupního a vystupního formátu X
+-napravit hromadìní skupin pøi opakovaném naèítání ze souboru X
+-jednoduchý plánovaè X
+-jednoduché tahy X
+-napsat move::distance(*item,*item)X;
+-upravit/napsat: State::writeTo(ostream &) a State::WriteToFile(char*)X
+-presunou move::distance do State::distance X
+-upravit move tak aby aby byla zadaná nticí mnozin druhù objektù
+-napsat tahy X
+-tøídu algorythm X
+-napsat algorytmus X
+- ve tøíde move: pøízpùsobení typickému stavu=>zvýšení effektivity pøi opakovaném volání state::returnGroup(string &name) v Move
+-napsat metody pro urcovani skore a utility value;
+******************************************************
+format dat:
+y 275 175 0
+e 2725 175 180
+p 354 76  
+q 346 87
+k 98 88
+ppk 2725 1925 
+******************************************************
+class move
+vlastnosti:
+	-ze zadaného stavu nalezne všechny možnosti provedení tahu 
+	a v závyslosti na jejích vysledku vrátí nový stav
+	-obshahuje metody pro :
+		provedení  tahu na zadanou aplikaci
+		provedení tahu na všechny možné aplikace
+		vypoèítání èasové složitosti tahù
+		nalezení všech aplikací tahu
+		vrácení všech aplikací tahu
+	-informace 
+		odkazy na všechny možné následníky
+		zda byly následníci už nalezení 
+		
+	
+	
+property:
+	vector<*state> newStates	//obsahuje odkazy na následníky stavu 
+	bool finded=false;			//zda probìhlo hledání možných aplikací
+	state* oldState				//odkaz na stav ze kterého se vytváøí nový state	
+	
+metody: 
+	void initMove(state&)	//TO DO!!!
+		-metoda inicializuje tah pro danou strukturu prvkù ve state 
+	bool makeMove(vector<item*>,state&)	
+		-metoda odlišující rùzné potomky "move", provede tah zadáný jako operace na n-tici objektù 
+			parametry: 
+				1.vektor ukazatelù na objekty na kterých se má tach provést.
+				2.ukazatel na stav na kterém se tah provádí
+			vrací:
+				true: pokud je daný tach možno provést, 
+				false: pokud je tah z nìjakého dùvodu nepøípustný
+	
+	vector<state> makeAllMoves(state&)
+		-metoda provede tah na všech pøípustných nticích daného stavu
+			parametry:
+				1.ukazatel na stav na kterém se mají provádìt tahy
+			vrací:
+				vektor následníku stavu po aplikaci tahu
+	
+*****************************************************************
+class moves
+vlastnosti: 
+	-ze zadaného stavu nalezne všechy dosažitelné stavy
+	-obsahuje metody pro :
+		získání následníkù ze všech možných tahù
+		zpravuje tahy-nahrávání tahù disabblování tahù 
+	-informace
+		obsahuje seznam tahù;
+		obsahuje jejich vlastnoti
+***************************************************************
+	
+class algorythm.	//potomek moves???
+vlastnosti: 
+	-dostane tahy a úvodní stav a nalezne nejlepší tah
+	
+	sekvence: 
+		1.vloží se stav
+		2.další podmínky 
+		3.vypoèítá nejlepší tahy 
+		4. vrátí nejlepší tahy
+ metody:
+	
+	loadMove(move&)//pøedìdit? z moves?
+	findBest(state&)	//
+	
+	
+**********************************************************************
+
+*************************************************************
+
+
+ 
+
+ 
+*************************************************
+
+možné tahy:
+
+	take pawn,figure,tower
+	-pøemístí se na dané místo a naloží se peon 
+	MoveToXy
+	Release
+	ReleaseToBest 
+	ReleaseToXy
+	drop 
