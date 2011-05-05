@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	origState.loadFromFile("state.txt");
 	origState.addItem(new Space());
 	origState.writeOut();
-	cout<<"nacteno... 
+	cout<<"nacteno...";
 	
 		char buffer[256];
 	    State lastState=State();
