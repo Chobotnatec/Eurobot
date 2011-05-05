@@ -476,19 +476,19 @@ public:
 		//tado medota vraci vsechny mozne aplikace tahu na dany stav
 	vector<vector<Item*> > findAplications( State &origState)
 	{
-		cout<<"finding all aplications"<<endl;
+		//cout<<"finding all aplications"<<endl;
 			//skupiny nalezenych prvkù
 		vector<vector<Item*> > orderedItems;	
 			//iterator najednotlive skupiny nalezenych prvku
-		vector<vector<Item*> >::iterator orderedItemsIt;	
+		//vector<vector<Item*> >::iterator orderedItemsIt;	
 			//iteratory do jednotlivych skupin
-		vector<vector<Item*>::iterator> iterators;
+		
 		vector<unsigned int> indexes;
 			//iterator do vektoru iteratorù do skupin
-		vector<vector<Item*>::iterator>::iterator iteratorsIt;
+		//vector<vector<Item*>::iterator>::iterator iteratorsIt;
 		
 			//iterator do prototypu tahu
-		vector<string>::iterator prototypeIt;
+		//vector<string>::iterator prototypeIt;
 			//vysledny vektor moznych aplikaci tahu na stav
 		vector<vector<Item*> > output;	
 			//pocet aplikaci
@@ -513,25 +513,23 @@ public:
 				
 			}
 
-			iterators.push_back((orderedItems.end()-1)->begin());
 			indexes.push_back(0);
 				//pocita pocet prvkù kartezkeho soucinu jednotlivych aplikaci=pocet aplikaci
 			numOfAplications=numOfAplications*( (orderedItems.end()-1)->size());	
 		}
 		
 
-		cout<<"pocet nalezenych aplikaci: "<<numOfAplications<<endl;
+		//cout<<"pocet nalezenych aplikaci: "<<numOfAplications<<endl;
 			//opakuj podle poctu aplikaci
-		for(unsigned int i=0; i<orderedItems.size(); i++)
-		{ 
-			cout<<"GROUP: "<<endl;
-			for( unsigned int j=0; j<orderedItems[i].size(); j++)
-			{
-				orderedItems[i][j]->writeOutItem();
-				
-			}
-			cout<<endl;
-		}
+		//for(unsigned int i=0; i<orderedItems.size(); i++)
+		//{ 
+			//cout<<"GROUP: "<<endl;
+		//	for( unsigned int j=0; j<orderedItems[i].size(); j++)
+		//	{
+			//	orderedItems[i][j]->writeOutItem();		
+		//	}
+		//	cout<<endl;
+		//}
 		for(;numOfAplications!=0;numOfAplications--)		
 		{
 				//pridej aplikaci
@@ -550,16 +548,16 @@ public:
 				//nejnizsi index
 			indexes[0]++;
 		}
-		cout<<endl<<"FINDED APLICATIONS:"<<endl;
-		for(unsigned int i=0; i<output.size(); i++)
-		{ 
-			cout<<"APLICATION: "<<endl;
-			for( unsigned int j=0; j<output[i].size(); j++)
-			{
-				output[i][j]->writeOutItem();	
-			}
-			cout<<endl;
-		}
+		//cout<<endl<<"FINDED APLICATIONS:"<<endl;
+		//for(unsigned int i=0; i<output.size(); i++)
+		//{ 
+			//cout<<"APLICATION: "<<endl;
+			//for( unsigned int j=0; j<output[i].size(); j++)
+			//{
+		//		output[i][j]->writeOutItem();	
+		//	}
+		//	cout<<endl;
+		//}
 			//vrat vysledny vektor aplikaci
 		return output;
 	};
@@ -577,40 +575,40 @@ public:
 		vector<vector<Item*> > aplications=findAplications(origState); 
 		
 			//pro kazdou aplikaci
-		cout<<"APLICAIIONS"<<endl;
-		for (unsigned int inn=0; inn<aplications.size(); inn++)
-		{
-			cout<<"APLIKACE:"<<endl;
-			for(unsigned int outt=0; outt<aplications[inn].size(); outt++)
-			{
-				 (aplications[inn][outt]->writeOutItem());
-			}
-			cout<<endl;
-			cout<<endl;
-		}
-		string haluz;
-		cin>>haluz;
+		//cout<<"APLICAIIONS"<<endl;
+		//for (unsigned int inn=0; inn<aplications.size(); inn++)
+		//{
+		//	cout<<"APLIKACE:"<<endl;
+		//	for(unsigned int outt=0; outt<aplications[inn].size(); outt++)
+		//	{
+		//		 (aplications[inn][outt]->writeOutItem());
+		//	}
+		//	cout<<endl;
+		//	cout<<endl;
+		//}
+		//string haluz;
+		//cin>>haluz;
 		for(unsigned int itAplication=0; itAplication<aplications.size(); itAplication++)	
 		{
 				//vytvor stejny stav jako pùvodni a pridej ho na vystup
 			output.push_back(origState);	
 				//pro kazdy prvkek aplikace
-			cout<<"APLICATION LOOP"<<endl;
+			//cout<<"APLICATION LOOP"<<endl;
 			for(unsigned int innerIt= 0; innerIt < aplications[itAplication].size(); innerIt++)	
 			{
 					//prestavi ukazatele do noveho stavu
 				//(*innerIt)=(output.end()-1)->items[(*innerIt)->groupID ][ (*innerIt)->groupPlace ];
-				cout<<"BEFORE LOOP:"<<endl;
-				cout<<"groupID: "<<aplications[itAplication][innerIt]->groupID<<endl;
-				cout<<"name:"<<aplications[itAplication][innerIt]->name<<endl;
-				cout<<"groupPlace: "<<aplications[itAplication][innerIt]->groupPlace<<endl;
-				(output.end()-1)->writeOut();
+				//cout<<"BEFORE LOOP:"<<endl;
+				//cout<<"groupID: "<<aplications[itAplication][innerIt]->groupID<<endl;
+				//cout<<"name:"<<aplications[itAplication][innerIt]->name<<endl;
+				//cout<<"groupPlace: "<<aplications[itAplication][innerIt]->groupPlace<<endl;
+				//(output.end()-1)->writeOut();
 				aplications[itAplication][innerIt]=(output.end()-1)->items.at(aplications[itAplication][innerIt]->groupID).at(aplications[itAplication][innerIt]->groupPlace);
-				string in;
-				cout<<"AFTER LOOP"<<endl;
-				cin>>in;
+				//string in;
+				//cout<<"AFTER LOOP"<<endl;
+				//cin>>in;
 			}
-			cout<<"APLICATION LOOP END"<<endl;
+			//cout<<"APLICATION LOOP END"<<endl;
 				//proved tah na aplikaci
 			if (false==makeMove(aplications[itAplication],*(output.end()-1)))
 			{	
