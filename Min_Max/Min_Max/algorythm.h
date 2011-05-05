@@ -70,7 +70,7 @@ public:
 			//index naslednika s nejvyšším skore
 		int index=-1;
 			//do jak velke budoucnosti se má predikovat
-		this->timeLimit=originalState.time+howFar//MAX_TIME;
+		this->timeLimit=originalState.time+howFar;//MAX_TIME;
 			//zajisteni ze se bude predikovat max do 90000ms
 		if(this->timeLimit>90000) this->timeLimit=90000;
 			//nalezeni nasledniku
