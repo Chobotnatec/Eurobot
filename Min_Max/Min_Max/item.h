@@ -1,6 +1,6 @@
 #ifndef _ITEM_H_
 #define _ITEM_H_
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
