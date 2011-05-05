@@ -90,11 +90,11 @@ int main(int argc, char* argv[])
 					stringstream converter;
 					converter<<lastState.cmdX;
 					converter>>converted;
-					state_update(socket,"cmdX",converted.c_str);
+					state_update(socket,"cmdX",converted.c_str());
 
 					converter<<lastState.cmdY;
 					converter>>converted;
-					state_update(socket,"cmdY",converted.c_str);
+					state_update(socket,"cmdY",converted.c_str());
 
 
 				}
