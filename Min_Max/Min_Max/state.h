@@ -562,11 +562,19 @@ public:
 				//vytvor stejny stav jako pùvodni a pridej ho na vystup
 			output.push_back(origState);	
 				//pro kazdy prvkek aplikace
+			
 			for(innerIt= itAplication->begin(); innerIt != itAplication->end(); innerIt++)	
 			{
 					//prestavi ukazatele do noveho stavu
-				//(*innerIt)=(output.end()-1)->items[(*innerIt)->groupID ][ (*innerIt)->groupPlace ];	
+				//(*innerIt)=(output.end()-1)->items[(*innerIt)->groupID ][ (*innerIt)->groupPlace ];
+				cout<<"BEFORE LOOP:"<<endl;
+				cout<<"groupID: "<<(*innerIt)->groupID<<endl;
+				cout<<"groupPlace: "<<(*innerIt)->groupPlace<<endl;
+				(output.end()-1)->writeOut();
 				(*innerIt)=(output.end()-1)->items.at((*innerIt)->groupID).at((*innerIt)->groupPlace);
+				string in;
+				cout<<"AFTER LOOP"<<endl;
+				cin>>in;
 			}
 				//proved tah na aplikaci
 			if (false==makeMove(*itAplication,*(output.end()-1)))
