@@ -476,7 +476,7 @@ public:
 		//tado medota vraci vsechny mozne aplikace tahu na dany stav
 	vector<vector<Item*> > findAplications( State &origState)
 	{
-		//cout<<"finding all aplications"<<endl;
+		cout<<"finding all aplications"<<endl;
 			//skupiny nalezenych prvkù
 		vector<vector<Item*> > orderedItems;	
 			//iterator najednotlive skupiny nalezenych prvku
@@ -516,7 +516,7 @@ public:
 		}
 		
 
-		//cout<<"pocet nalezenych aplikaci: "<<numOfAplications<<endl;
+		cout<<"pocet nalezenych aplikaci: "<<numOfAplications<<endl;
 			//opakuj podle poctu aplikaci
 		for(;numOfAplications!=0;numOfAplications--)		
 		{
