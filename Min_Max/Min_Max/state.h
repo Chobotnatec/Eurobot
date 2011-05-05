@@ -496,6 +496,7 @@ public:
 		{
 				//nalezne skupiny vhodnych prvkù
 			vector<Item*> newLine=( origState.ReturnGroup(stringPrototype[i]));	
+			
 				//vlozi iterator na nalezenou skupinu prvku
 			orderedItems.push_back(vector<Item*>());
 			
@@ -518,6 +519,16 @@ public:
 
 		cout<<"pocet nalezenych aplikaci: "<<numOfAplications<<endl;
 			//opakuj podle poctu aplikaci
+		for(unsigned int i=0; i<orderedItems.size(); i++)
+		{ 
+			cout<<"GROUP: "<<endl;
+			for( unsigned int j=0; j<orderedItems[i].size(); j++)
+			{
+				orderedItems[i][j]->writeOutItem();
+				
+			}
+			cout<<endl;
+		}
 		for(;numOfAplications!=0;numOfAplications--)		
 		{
 				//pridej aplikaci
