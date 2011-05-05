@@ -176,6 +176,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\stateS.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -219,6 +223,10 @@
 			</File>
 			<File
 				RelativePath=".\state.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stateS.h"
 				>
 			</File>
 			<File

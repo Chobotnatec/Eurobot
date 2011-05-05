@@ -32,6 +32,9 @@ public:
 		thatState.reMoveItem(items[0]);
 		thatState.lastMoves=thatState.lastMoves+" Funny "+items[1]->name;
 		thatState.value=50;
+		thatState.cmd= "funny";
+		thatState.cmdX= where_x;
+		thatState.cmdY= where_y;
 		return true;
 	}
 };
@@ -72,6 +75,7 @@ public:
 		//metoda vykonávající tah
 	virtual bool makeMove(vector<Item*> items,State &thatState)
 	{
+		if( static_cast<Space*>(items[2])->cargo!="" &&( items[1]->x < 560 ||items[1]->x >2440) ); return false;
 			//pokud je uz v zasobniku jeden pawn tak se da pouze nabrat dalsi
 		if (items[1]->name=="t")
 		{
@@ -89,7 +93,9 @@ public:
 		else return false;
 	
 		thatState.lastMoves=thatState.lastMoves+" take "+items[1]->name;//+(boost::str(boost::format("%1% %2%") % items[1]->x_mm % items[1]->y_mm));
-		
+		thatState.cmd= "take";
+		thatState.cmdX= items[1]->x_mm;
+		thatState.cmdY= items[1]->y_mm;
 			//vypocet trvani tahu;
 		int time=thatState.distance(items[0],items[1])*2;
 			//vypocet casove znamky noveho casu
@@ -120,8 +126,12 @@ public:
 	}
 	virtual bool makeMove(vector<Item*> items, State& thatState)
 	{
-		thatState.time+=1000;
-		//thatState.lastMoves=thatState.lastMoves+" w";
+		thatState.time+=3000;
+		thatState.value+=1;
+		thatState.lastMoves=thatState.lastMoves+" w";
+		thatState.cmd= "wait";
+		thatState.cmdX= 0;
+		thatState.cmdY= 0;
 		return true;
 	}
 };
@@ -179,6 +189,9 @@ public:
 		thatState.addItem(newItem);
 		
 		thatState.lastMoves=thatState.lastMoves+" put";//+(boost::str(boost::format("%1% %2%") % newItem->x_mm % newItem->y_mm));
+		thatState.cmd= "put";
+		thatState.cmdX= newItem->x_mm;
+		thatState.cmdY= newItem->y_mm;
 		if(thatState.time>90000) return false;
 			//uvolnìní nákladu
 		static_cast<Space*>(items[1])->cargo="";

@@ -19,6 +19,9 @@ public:
 		//pocet prvku ve stavu
 	int numOfitems;
 	string lastMoves;
+	string cmd;
+	int cmdX;
+	int cmdY;
 		//vektor obsahuje vsechny prvky stavu ve vektorech podle skupin
 	vector<vector<Item*> > items; 
 		//obsahuje nazvy jednotlivych skupin objektu
