@@ -560,10 +560,13 @@ public:
 		cout<<"APLICAIIONS"<<endl;
 		for (unsigned int inn=0; inn<aplications.size(); inn++)
 		{
+			cout<<"APLIKACE:"<<endl;
 			for(unsigned int outt=0; outt<aplications[inn].size(); outt++)
 			{
 				 (aplications[inn][outt]->writeOutItem());
 			}
+			cout<<endl;
+			cout<<endl;
 		}
 		string haluz;
 		cin>>haluz;
