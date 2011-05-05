@@ -545,7 +545,7 @@ public:
 					if( (iteratorsIt+1)!=iterators.end()) (*(iteratorsIt+1))++;
 				}
 					//pridej aktualni iterator do prave tvorene aplikace na vystupu
-				(output.end()-1)->push_back( **iteratorsIt);
+				(output.end()-1)->push_back( *(*iteratorsIt));
 				
 			}
 				//nejnizsi iterator se inkrementuje s kazdou novou aplikaci
