@@ -176,7 +176,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\stateS.cpp"
+				RelativePath=".\server.cpp"
 				>
 			</File>
 			<File
@@ -222,11 +222,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\state.h"
+				RelativePath=".\server.h"
 				>
 			</File>
 			<File
-				RelativePath=".\stateS.h"
+				RelativePath=".\state.h"
 				>
 			</File>
 			<File

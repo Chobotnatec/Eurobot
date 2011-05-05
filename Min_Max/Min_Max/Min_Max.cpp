@@ -86,15 +86,15 @@ int main(int argc, char* argv[])
 					}
 					lastState= myAlgorythm.find(newState);
 
-					state_update(socket,"cmd",lastState.cmd);
+					state_update(socket,"cmd",lastState.cmd.c_str());
 					stringstream converter;
 					converter<<lastState.cmdX;
 					converter>>converted;
-					state_update(socket,"cmdX",converted);
+					state_update(socket,"cmdX",converted.c_str);
 
 					converter<<lastState.cmdY;
 					converter>>converted;
-					state_update(socket,"cmdY",converted);
+					state_update(socket,"cmdY",converted.c_str);
 
 
 				}
