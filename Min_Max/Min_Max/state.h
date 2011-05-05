@@ -570,29 +570,29 @@ public:
 		}
 		string haluz;
 		cin>>haluz;
-		for(itAplication=aplications.begin(); itAplication!=aplications.end(); itAplication++)	
+		for(unsigned int itAplication=0; itAplication<aplications.size(); itAplication++)	
 		{
 				//vytvor stejny stav jako pùvodni a pridej ho na vystup
 			output.push_back(origState);	
 				//pro kazdy prvkek aplikace
 			cout<<"APLICATION LOOP"<<endl;
-			for(innerIt= itAplication->begin(); innerIt != itAplication->end(); innerIt++)	
+			for(unsigned int innerIt= 0; innerIt < aplications[itAplication].size(); innerIt++)	
 			{
 					//prestavi ukazatele do noveho stavu
 				//(*innerIt)=(output.end()-1)->items[(*innerIt)->groupID ][ (*innerIt)->groupPlace ];
 				cout<<"BEFORE LOOP:"<<endl;
-				cout<<"groupID: "<<(*innerIt)->groupID<<endl;
-				cout<<"name:"<<(*innerIt)->name<<endl;
-				cout<<"groupPlace: "<<(*innerIt)->groupPlace<<endl;
+				cout<<"groupID: "<<aplications[itAplication][innerIt]->groupID<<endl;
+				cout<<"name:"<<aplications[itAplication][innerIt]->name<<endl;
+				cout<<"groupPlace: "<<aplications[itAplication][innerIt]->groupPlace<<endl;
 				(output.end()-1)->writeOut();
-				(*innerIt)=(output.end()-1)->items.at((*innerIt)->groupID).at((*innerIt)->groupPlace);
+				aplications[itAplication][innerIt]=(output.end()-1)->items.at(aplications[itAplication][innerIt]->groupID).at(aplications[itAplication][innerIt]->groupPlace);
 				string in;
 				cout<<"AFTER LOOP"<<endl;
 				cin>>in;
 			}
 			cout<<"APLICATION LOOP END"<<endl;
 				//proved tah na aplikaci
-			if (false==makeMove(*itAplication,*(output.end()-1)))
+			if (false==makeMove(aplications[itAplication],*(output.end()-1)))
 			{	
 				//pokud tah vrati false tak ho odstran stav z vystupu
 				output.pop_back();		
