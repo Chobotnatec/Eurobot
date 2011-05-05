@@ -1,7 +1,7 @@
 
 //poslední editace 27.2 NO ISSUE
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -21,7 +21,8 @@ using namespace std;
 
 
 
-int _tmain(int argc, _TCHAR* argv[])
+//int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, _TCHAR* argv[])
 {	
 	State origState;
 	

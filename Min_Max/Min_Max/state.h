@@ -20,14 +20,14 @@ public:
 	int numOfitems;
 	string lastMoves;
 		//vektor obsahuje vsechny prvky stavu ve vektorech podle skupin
-	vector<vector<Item*>> items; 
+	vector<vector<Item*> > items; 
 		//obsahuje nazvy jednotlivych skupin objektu
 	vector<string> groups; 
 //METODY:
 			//vypise vsechny objekty ve stavu na std vystup
 	void writeOut(void)
 	{		
-		vector<vector<Item*>>::iterator outerIt;	//iterator na skupiny objektù;
+		vector<vector<Item*> >::iterator outerIt;	//iterator na skupiny objektù;
 		vector<Item*>::iterator innerIt; //iterator na objekty 
 
 		cout<< endl <<"    vypisuji stav:" << endl;
@@ -56,7 +56,7 @@ public:
 			//vraci vektor vsech ukazatelù na objekty daneho typu
 	vector<Item*> ReturnGroup( string groupName)
 	{
-		vector<vector<Item*>>::iterator groupIt;
+		vector<vector<Item*> >::iterator groupIt;
 		
 		for (unsigned int i=0;i<this->items.size(); i++){
 			if (groups[i]==groupName) return items[i];
@@ -126,7 +126,7 @@ public:
 
 		ofstream output(file,ios_base::app);
 		vector<Item*>::iterator innerIt;
-		vector<vector<Item*>>::iterator outerIt;
+		vector<vector<Item*> >::iterator outerIt;
 		output<<"0";	//nula na zacatku formatu
 		for (outerIt=items.begin(); outerIt!= items.end(); outerIt++){
 			
@@ -140,7 +140,7 @@ public:
 		//uloží stav do zadaného proudu;
 	void writeTo(ostream& output){
 		vector<Item*>::iterator innerIt;
-		vector<vector<Item*>>::iterator outerIt;
+		vector<vector<Item*> >::iterator outerIt;
 		output<<"0";	//nula na zacatku formatu
 			//pro každý objekt zavolá metodu writeTo(ostream &)
 		for (outerIt=items.begin(); outerIt!= items.end(); outerIt++){
@@ -158,7 +158,7 @@ public:
 	
 		this->getConsistent();
 		int utilityValue=0;
-		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		for( vector<vector<Item*> >::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
 		{
 			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
 				//if((*innerIt)->valide==true &&  true /*color == (*innerIt)->color*/)
@@ -176,7 +176,7 @@ public:
 		//cout<<"s";
 		this->getConsistent();
 		int utilityValue=0;
-		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		for( vector<vector<Item*> >::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
 		{
 			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
 				if((*innerIt)->valide==true && true /*color == (*innerIt)->color*/)
@@ -191,7 +191,7 @@ public:
 		//pro všechny prvky  
 	void getConsistent()
 	{
-		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		for( vector<vector<Item*> >::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
 		{
 			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
 			(*innerIt)->mmToX(); 
@@ -474,13 +474,13 @@ public:
 	
 		
 		//tado medota vraci vsechny mozne aplikace tahu na dany stav
-	vector<vector<Item*>> findAplications( State &origState)
+	vector<vector<Item*> > findAplications( State &origState)
 	{
 		//cout<<"finding all aplications"<<endl;
 			//skupiny nalezenych prvkù
-		vector<vector<Item*>> orderedItems;	
+		vector<vector<Item*> > orderedItems;	
 			//iterator najednotlive skupiny nalezenych prvku
-		vector<vector<Item*>>::iterator orderedItemsIt;	
+		vector<vector<Item*> >::iterator orderedItemsIt;	
 			//iteratory do jednotlivych skupin
 		vector<vector<Item*>::iterator> iterators;	
 			//iterator do vektoru iteratorù do skupin
@@ -488,7 +488,7 @@ public:
 			//iterator do prototypu tahu
 		vector<string>::iterator prototypeIt;
 			//vysledny vektor moznych aplikaci tahu na stav
-		vector<vector<Item*>> output;	
+		vector<vector<Item*> > output;	
 			//pocet aplikaci
 		signed int numOfAplications=1;
 
@@ -547,14 +547,14 @@ public:
 	vector<State> makeAllMoves( State &origState)	
 	{	
 			//iterator na jednotlive aplikace tahu
-		vector<vector<Item*>>::iterator itAplication;
+		vector<vector<Item*> >::iterator itAplication;
 			//iterator do vnitrku jednotlivych aplikaci
 		vector<Item*>::iterator innerIt; 
 			//vysledny vektor stavù
 		vector<State> output;	
 		
 			//na originalnim stavu nalezne vsechny aplikace
-		vector<vector<Item*>> aplications=findAplications(origState); 
+		vector<vector<Item*> > aplications=findAplications(origState); 
 		
 			//pro kazdou aplikaci
 		for(itAplication=aplications.begin(); itAplication!=aplications.end(); itAplication++)	
