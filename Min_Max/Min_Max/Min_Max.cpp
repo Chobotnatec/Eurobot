@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 			stringstream converter;
 			converter<<buffer;
 			converter>>converted;
-			if(converted="true")
+			if(converted=="true")
 			{
 			cout<<"konec programu"<<endl;
 			return 0;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 			if(converted=="true")
 			{
 				state_update(socket,"isNewState","false");
-				if(state_query(socket,"newState",buffer)==0
+				if(state_query(socket,"newState",buffer)==0)
 				{
 					{
 					stringstream converter;
