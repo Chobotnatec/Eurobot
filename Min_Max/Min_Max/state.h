@@ -562,11 +562,11 @@ public:
 				//vytvor stejny stav jako pùvodni a pridej ho na vystup
 			output.push_back(origState);	
 				//pro kazdy prvkek aplikace
-			for(innerIt=itAplication->begin();innerIt!=itAplication->end(); innerIt++)	
+			for(innerIt= itAplication->begin(); innerIt != itAplication->end(); innerIt++)	
 			{
 					//prestavi ukazatele do noveho stavu
-				(*innerIt)=(output.end()-1)->items[ (*innerIt)->groupID ][ (*innerIt)->groupPlace ];	
-
+				//(*innerIt)=(output.end()-1)->items[(*innerIt)->groupID ][ (*innerIt)->groupPlace ];	
+				(*innerIt)=(output.end()-1)->items.at((*innerIt)->groupID).at((*innerIt)->groupPlace);
 			}
 				//proved tah na aplikaci
 			if (false==makeMove(*itAplication,*(output.end()-1)))

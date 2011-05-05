@@ -22,7 +22,7 @@ using namespace std;
 
 
 //int _tmain(int argc, _TCHAR* argv[])
-int main(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {	
 	State origState;
 	
