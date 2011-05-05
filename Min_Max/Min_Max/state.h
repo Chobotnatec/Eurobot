@@ -482,9 +482,11 @@ public:
 			//iterator najednotlive skupiny nalezenych prvku
 		vector<vector<Item*> >::iterator orderedItemsIt;	
 			//iteratory do jednotlivych skupin
-		vector<vector<Item*>::iterator> iterators;	
+		vector<vector<Item*>::iterator> iterators;
+		vector<unsigned int> indexes;
 			//iterator do vektoru iteratorù do skupin
-		vector<vector<Item*>::iterator>::iterator iteratorsIt;	
+		vector<vector<Item*>::iterator>::iterator iteratorsIt;
+		
 			//iterator do prototypu tahu
 		vector<string>::iterator prototypeIt;
 			//vysledny vektor moznych aplikaci tahu na stav
@@ -512,6 +514,7 @@ public:
 			}
 
 			iterators.push_back((orderedItems.end()-1)->begin());
+			indexes.push_back(0);
 				//pocita pocet prvkù kartezkeho soucinu jednotlivych aplikaci=pocet aplikaci
 			numOfAplications=numOfAplications*( (orderedItems.end()-1)->size());	
 		}
@@ -534,22 +537,18 @@ public:
 				//pridej aplikaci
 			output.push_back( vector<Item*>());				
 				//ciklus generuje vsechny mozne aplikace 
-			for(  iteratorsIt=iterators.begin(), orderedItemsIt=orderedItems.begin(); iteratorsIt!=iterators.end(); iteratorsIt++,orderedItemsIt++)
+			for( unsigned int i=0; i<indexes.size(); i++)
 			{
 					//pokud aktualni iterator ukazuje na konec mu prislusneho pole
-				if ( (*iteratorsIt)==orderedItemsIt->end())
+				if ( indexes[i]==orderedItems[i].size())
 				{
-						//nech ho ukazaovat na zacatek
-					(*iteratorsIt)=orderedItemsIt->begin();
-						//a dalsi iterator v poradi inkrementuj
-					if( (iteratorsIt+1)!=iterators.end()) (*(iteratorsIt+1))++;
+					indexes[i]=0;
+					if( i+1<indexes.size()) indexes[i+1]++;
 				}
-					//pridej aktualni iterator do prave tvorene aplikace na vystupu
-				(output.end()-1)->push_back( *(*iteratorsIt));
-				
+				output[output.size()-1].push_back(orderedItems[i][indexes[i]]);
 			}
-				//nejnizsi iterator se inkrementuje s kazdou novou aplikaci
-			iterators[0]++;
+				//nejnizsi index
+			indexes[0]++;
 		}
 		cout<<endl<<"FINDED APLICATIONS:"<<endl;
 		for(unsigned int i=0; i<output.size(); i++)
