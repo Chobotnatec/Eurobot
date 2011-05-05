@@ -557,6 +557,16 @@ public:
 		vector<vector<Item*> > aplications=findAplications(origState); 
 		
 			//pro kazdou aplikaci
+		cout<<"APLICAIIONS"<<endl;
+		for (unsigned int inn=0; inn<aplications.size(); inn++)
+		{
+			for(unsigned int outt=0; outt<aplications[inn].size(); outt++)
+			{
+				 (aplications[inn][outt]->writeOutItem());
+			}
+		}
+		string haluz;
+		cin>>haluz;
 		for(itAplication=aplications.begin(); itAplication!=aplications.end(); itAplication++)	
 		{
 				//vytvor stejny stav jako pùvodni a pridej ho na vystup
