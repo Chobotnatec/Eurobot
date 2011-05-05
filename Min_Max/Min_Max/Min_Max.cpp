@@ -51,9 +51,10 @@ int main(int argc, char* argv[])
 		State newState=State();
 		stringstream converter;
 		string converted;
+		const int socket=init_socket();
 	while(1)
 	{
-		const int socket=init_socket();
+		
 		state_update(socket,"logic_online","true");
 		if (state_query(socket,"end",buffer)==0)
 		{
