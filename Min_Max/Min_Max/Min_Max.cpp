@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 			stringstream converter;
 			converter<<buffer;
 			converter>>converted;
-			{
+			}
 			if(converted=="true")
 			{
 				state_update(socket,"isNewState","false");
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 					stringstream converter;
 					converter<<buffer;
 					newState.loadFrom(converter);
-					{
+					}
 					lastState= myAlgorythm.find(newState);
 
 					state_update(socket,"cmd",lastState.cmd);
