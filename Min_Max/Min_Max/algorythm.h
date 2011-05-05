@@ -129,8 +129,8 @@ public:
 		}
 		
 		if (highestScore==NULL)
-		{	//cout<<originalState.lastMoves;
-			//cout<<" -end with:"<<originalState.utility('b')<<endl;
+		{	cout<<originalState.lastMoves;
+			cout<<" -end with:"<<originalState.utility('b')<<endl;
 			if (originalState.utility('b')>highestEver)
 			{
 				this->highestEver=originalState.utility('b');
@@ -144,7 +144,7 @@ public:
 		
 		else
 		{
-			//cout<<"-backTrack"<<endl;
+			cout<<"-backTrack"<<endl;
 			return highestScore;
 		}
 		
