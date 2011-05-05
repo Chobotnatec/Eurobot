@@ -18,10 +18,7 @@ using namespace std;
 
 
 
-class BadAlgorythm:public Algorythm{
-	//funkce najde nejkratsi cestu jak pozbirat prvky
 
-};
 
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -29,22 +26,36 @@ int _tmain(int argc, _TCHAR* argv[])
 	State origState;
 	
 	basicSearchAlgorythm myAlgorythm;
+	myAlgorythm.loadMove(new Take("y","f","s"));
 	myAlgorythm.loadMove(new Take("y","p","s"));
-	myAlgorythm.loadMove(new Wait("y"));
+	myAlgorythm.loadMove(new Take("y","t","s"));
+	myAlgorythm.loadMove(new Funny("y","s",200,1900));
+	//myAlgorythm.loadMove(new Wait("y"));
 	myAlgorythm.loadMove(new Release("y","s"));
+	
 	istream* input=&cin;
 	ostream* output=&cout;
 	string konec="ahoj";
-	
+	cout<<"zdarec"<<endl;
+	cout<<"loading..."<<endl;
+	origState.loadFromFile("state.txt");
+	origState.addItem(new Space());
+	origState.writeOut();
+	cout<<"naceteno... dej lib. vstup"<<endl;
+	cin>>konec;
 	while(1)
 	{
-		while(konec!="NEW_STATE")
-		{
-			if (konec=="END") return 1;
-		}
-		origState.loadFrom( *input);
-		myAlgorythm.find(origState).writeToFile("ostate.txt");
-		
+		if (konec=="konec") return 0;
+		origState=myAlgorythm.find(origState);
+		origState.writeOut();
+		cout<<myAlgorythm.way<<endl;
+		//outState =myAlgorythm.find(outState);
+		//outState.writeOut();
+		//outState =myAlgorythm.find(outState);
+		//outState.writeOut();
+	
+		//outState.writeToFile("ostate.txt");
+		cin>>konec;
 	}
 }
 

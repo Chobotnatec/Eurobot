@@ -12,6 +12,7 @@
 #include <cmath>
 using namespace std;
 
+
 class Item{
 public:
 //ATRIBUTY:
@@ -21,14 +22,17 @@ public:
 		//poloha na hristi v mm
 	int x_mm;
 	int y_mm;
-		//ID skuiny prvku
+		//ID skupiny prvku
 	int groupID;
 		//poloha vramci skupiny
 	int groupPlace;
 		//ID prvku 
 	int ID;
-		//zda je prvkej zpravne umisten
+		//zda je prvek zprávnì umístìn na bodované pole
 	bool valide;
+		//která barva má pøípadné body
+	char color;
+		//zda je prvek prùchozí èi nikoliv
 	bool unpassable;
 		//hodnota prvku
 	int value;
@@ -37,7 +41,7 @@ public:
 		//info o  pro testovani
 	string Info;
 //METODY:
-		//nastavi vlastni z vektoru stringu
+		//nastavi vlastnosti z vektoru stringu
 	void Constr(vector<string>::iterator &itPoint){
 		name=(*itPoint);
 		istringstream (*(itPoint+1))>>this->x_mm;
@@ -45,7 +49,8 @@ public:
 		this->mmToX();
 		this->mmToY();
 		itPoint=itPoint+3;
-		valide=false;
+		valide=this->isValide();
+		this->unpassable=true;
 	}
 		//kostruktor nastavi zakladni hodnoty vsemu	
 	Item()
@@ -53,25 +58,26 @@ public:
 		x=0;
 		y=0;
 		ID=0;
+		value=0;
 		groupID=0;
 		string name="def";
 		valide=false;
+		color='d';
+		unpassable=true;
 	} 
 		//konstruktor z vektoru stringu
 	Item(vector<string>::iterator &itPoint){	
 		Constr(itPoint);
 	}
 		//vraci ukazatel na kopii objektu
-	virtual Item* copy(void)=0;
-		//zapise objekt do vystupni ho proudu
-		//TODO:predelat do obecneho vystupniho proudu a ne file;
-	
+	virtual Item* copy()=0;
+		//zapise objekt na zadany proudu
 	virtual void writeTo(ostream &output){
 		output<<endl<<" "<<this->name<<" "<<
 			this->x_mm<<" "<<this->y_mm;
 	}
 		//vypise objekt na std vystup
-	virtual void writeOutItem(void){
+	virtual void writeOutItem(){
 		cout<<" ID:"<<ID;
 		cout<<" name:"<<name;
 		cout<<" gr-ID: "<<this->groupID;
@@ -81,32 +87,63 @@ public:
 		cout<<"xy: "<<this->x_mm<<" "<<this->y_mm;
 		cout<<" valid: "<<this->valide<<endl;
 		
-	}	
-		//prevod souradnic v mm na polohu
-	void mmToX(int mm)
-	{
-		this->x=((mm-100)/350);
 	}
-	void mmToX(void)
+	virtual int getValue(char flag)
+	{	
+		if (this->isValide()) return value;
+		else return 0;
+	}
+		// zkontroluje zda je objekt platnì umístìn
+	virtual bool isValide(void)
+	{
+		if( this->y_mm % 350> 100 
+			&& this->y_mm % 350 <250 
+			&& (this->x_mm-450) % 350 >100  
+			&& (this->x_mm-450) % 350 <250)
+		{
+			this->valide=true;
+			return true;
+		}
+		else 
+		{
+			this->valide= false;
+			return false;
+		}
+	}
+		//prevod souradnic v mm na polohu ve ètvercích
+	int mmToX(int mm)
+	{
+		this->x_mm= mm;
+		this->x= ((mm-100)/350);
+		return this->x;
+	}
+	int mmToX(void)
 	{
 		this->x=((this->x_mm-100)/350);
+		return this->x;
 	}
-	void mmToY(int mm)
+	int mmToY(int mm)
 	{
-		this->y=(mm/350);
+		this->y_mm= mm;
+		this->y= (mm/350);
+		return this->y;
 	}
-	void mmToY(void)
+	int mmToY(void)
 	{
-		this->y=(this->y_mm/350);
+		this->y= (this->y_mm/350);
+		return this->y;
 	}
-		//prevod souradnic na mm polohohu
-	void xToMm(void)
+		//prevod souradnic na mm polohu
+	int xToMm(void)
 	{
-		this->y_mm=(this->y*350+175);
+		this->y_mm= (this->y*350+175);
+		return this->y_mm;
 	}
-	void yToMm(void)
+	int yToMm(void)
 	{
-		this->x_mm=(this->x*350+275);
+		this->x_mm= (this->x*350+275);
+		return this->y_mm;
 	}
+	
 };
 #endif

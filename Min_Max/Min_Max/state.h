@@ -18,39 +18,44 @@ public:
 	int numOfGroups;
 		//pocet prvku ve stavu
 	int numOfitems;
+	string lastMoves;
 		//vektor obsahuje vsechny prvky stavu ve vektorech podle skupin
 	vector<vector<Item*>> items; 
 		//obsahuje nazvy jednotlivych skupin objektu
 	vector<string> groups; 
 //METODY:
 			//vypise vsechny objekty ve stavu na std vystup
-	void writeOut(void){		
+	void writeOut(void)
+	{		
 		vector<vector<Item*>>::iterator outerIt;	//iterator na skupiny objektù;
 		vector<Item*>::iterator innerIt; //iterator na objekty 
-		cout<<endl<<"    vypisuji stav:"<<endl;
-		cout<<"value: "<<this->value<<endl;	//vypsani stavovych hodnot stavu
-		cout<<"time:"<<this->time<<endl;
-		cout<<"highestID: "<<this->highestID<<endl;
-		cout<<"highestgroupID: "<<this->highestGroupID<<endl;
-		cout<<"numOfGroups: "<<this->numOfGroups<<endl;
-		cout<<"numOfitems: "<<this->numOfitems<<endl;
-		cout<<"groups: "<<endl;
+
+		cout<< endl <<"    vypisuji stav:" << endl;
+		cout<< "value: " << this->value << endl;	//vypsani stavovych hodnot stavu
+		cout<< "time:" << this->time << endl;
+		cout<< "highestID: " << this->highestID << endl;
+		cout<< "highestgroupID: " << this->highestGroupID << endl;
+		cout<< "numOfGroups: " << this->numOfGroups << endl;
+		cout<< "numOfitems: " << this->numOfitems << endl;
+		cout<< "groups: " <<endl;
+		cout<< "predesle tahy: "<<lastMoves <<endl;
 		for (unsigned int i=0; i<this->groups.size(); i++)
 		{
-			cout<<"  "<<this->groups[i];
+			cout << "  " << this->groups[i];
 		}
-		cout<<endl;
-		cout<<"items:"<<endl;
-		for( outerIt=items.begin(); outerIt!=items.end(); outerIt++){
+		cout<< endl;
+		cout<< "items:" <<endl;
+		for( outerIt= items.begin(); outerIt!= items.end(); outerIt++){
 			
-			for( innerIt=outerIt->begin(); innerIt!=outerIt->end(); innerIt++){
+			for( innerIt= outerIt->begin(); innerIt!= outerIt->end(); innerIt++){
 				(*innerIt)->writeOutItem();
 			}
 		}
-		cout<<endl;
+		cout << endl;
 	}				
 			//vraci vektor vsech ukazatelù na objekty daneho typu
-	vector<Item*> ReturnGroup(string groupName){
+	vector<Item*> ReturnGroup( string groupName)
+	{
 		vector<vector<Item*>>::iterator groupIt;
 		
 		for (unsigned int i=0;i<this->items.size(); i++){
@@ -61,45 +66,51 @@ public:
 	
 	}
 			//vraci vektor vsech prvkù skupiny-podle groupID
-	vector<Item*> ReturnGroup(int groupID){
+	vector<Item*> ReturnGroup(int groupID)
+	{
 		return this->items[groupID];
 	}
 			//prida prvke mezi ostatni prvky
-	void addItem(Item *newItem){
-		cout<<"adding"<<endl;
+	void addItem(Item *newItem)
+	{
 			//prideli ID
 		(this->highestID)++;			
-		newItem->ID=this->highestID;
-				
-		for ( unsigned int i=0 ; i<items.size(); i++){	//projdou se vsechny duhy objektù jestli odpovidaji zadanemu
-			if (groups[i]==newItem->name){
+		newItem->ID= this->highestID;
+				//projdou se vsechny duhy objektù jestli odpovidaji zadanemu
+		for ( unsigned int i=0 ; i<items.size(); i++)
+		{	
+			if (groups[i]==newItem->name)
+			{
 				newItem->groupID=i;	//nastaveni group ID podle mista kam je prvek zarazen
 				newItem->groupPlace=items[i].size();//nastaveni group place-prvek byl dodan na konec
 				items[i].push_back(newItem);
-				cout<<"succes"<<endl;
+				//cout<<"succes"<<endl;
 				
 				return;
 			}
 		}
 				//pokud neodpovida zadna skupina pak se vytvori nova
-		newItem->groupID=items.size();	//prirazeni group ID 
+		
+		newItem->groupID= items.size();	//prirazeni group ID 
 		items.push_back(vector<Item*>());
-		newItem->groupPlace=(items.end()-1)->size();	//prirazeni ob
+		newItem->groupPlace= (items.end()-1)->size();	//prirazeni ob
 		(items.end()-1)->push_back(newItem);
 		this->groups.push_back(newItem->name);
-		cout<<"succes-new line"<<endl;
+		//cout<<"succes-new line"<<endl;
 		this->highestGroupID++;
+		
+		
 	}
+		//vrati vzdalenost mezi dvema prvky v mm
 	virtual int distance(Item* from,Item* to){
 		return (int)sqrt((double)(from->x_mm * from->y_mm + to->x_mm * to->y_mm));
 	}
+		//vrati vzdlaenost mezi dvema body
 	virtual int distance(int x1, int y1, int x2, int y2)
 	{
 		return (int)sqrt((double)(x1 * y1 + x2 * y2));
 	}
-	
-
-			//odstrani prvek z items a upravi odpovidajici indexy
+		//odstrani prvek z items a upravi odpovidajici indexy
 	void reMoveItem(Item *reMoveThis)
 	{	
 		items[reMoveThis->groupID].erase(items[reMoveThis->groupID].begin()+reMoveThis->groupPlace);//odsran prvek ze items
@@ -143,44 +154,78 @@ public:
 	}
 	int utility(char color)
 	{
-		return 0;
+		//cout<<"u";
+	
+		this->getConsistent();
+		int utilityValue=0;
+		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		{
+			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
+				//if((*innerIt)->valide==true &&  true /*color == (*innerIt)->color*/)
+				//{
+					utilityValue+= (*innerIt)->getValue('u');					
+					
+				//}
+			}
+		}
+		utilityValue+= this->value;
+		return utilityValue;
 	}
 	int score(char color)
 	{
-		return 0;
+		//cout<<"s";
+		this->getConsistent();
+		int utilityValue=0;
+		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		{
+			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
+				if((*innerIt)->valide==true && true /*color == (*innerIt)->color*/)
+				{
+					utilityValue+= (*innerIt)->getValue('s');					
+
+				}
+			}
+		}
+		return utilityValue;
+	}
+		//pro všechny prvky  
+	void getConsistent()
+	{
+		for( vector<vector<Item*>>::iterator outerIt =this->items.begin(); outerIt != this->items.end(); outerIt++)
+		{
+			for(vector<Item*>::iterator innerIt = outerIt->begin(); innerIt != outerIt->end(); innerIt++){
+			(*innerIt)->mmToX(); 
+			(*innerIt)->mmToY();
+			(*innerIt)->isValide();
+			
+			}
+		}
 	}
 		//najde neblisi volne misto k objektu
 	bool findFreeSpot(int &X,int &Y, robot* rob,char color )
-	{
+	{	
+		this->getConsistent();
 		//aktualizujisi souradnice;
 		rob->mmToX();
 		rob->mmToY();
-		//zkusím zda neni volny prvek primo pod robotem
-		if (this->checkIfFree(rob->x,rob->y)==true)
-		{
-			X=rob->x;
-			Y=rob->y;
-			return true;
-		}
+		
+		
 		//promena uklada nejmensi vzdalenost k nalezenemu prvku
-		int minAbs=10;
+		int minAbs=12;
 		//prochazi se mista v okoly robota
-		for(int _x=-2; _x<3; _x++)
+		for(int _x=-5; _x<5; _x++)
 		{
-			for(int _y=-2; _y<3; _y++)
+			for(int _y=-5; _y<5; _y++)
 			{
 				//pokud pole se posuzuje pouze pokud má zprávnou bravu
 				if (  ((_x+_y+rob->x+rob->y)%2==0 && color=='b' ) || ((_x+_y+rob->x+rob->y)%2==1 && color=='r' ) )
 				{
-					if( rob->x==0|| rob->x==7) break;
-						//a pokud je jeji vzdálenost mensi nez nejmensi dopusud nalezena
-							//TO DO  POSUZOVANI ORIENTACE ROBOTA
-							//TO DO procházení podle vzdálenosti
-					
-					if (  abs( _x)+abs( _y) <minAbs)
+					if( rob->x+_x<=0 || rob->x+_x>=7);
+					else if( rob->y+_y<=0 || rob->y+_y>=7);
+					else if (  abs( _x)+abs( _y) <minAbs)
 					{
 							//zkontroluj jeli pole volne
-						if (this->checkIfFree(rob->x+_x,rob->y+_y) )
+						if (this->checkIfFree(rob->x+_x,rob->y+_y)==true )
 						{
 								//pokud je pole volne tak ho dej jako vystup;
 							X=rob->x+_x;
@@ -193,7 +238,7 @@ public:
 
 		}
 			//pokud bylo nalezeno volne pole v okoli tak vrat true 
-		if (minAbs<10) return true;
+		if (minAbs<12) return true;
 			//jinak false
 		else return false;
 	
@@ -201,7 +246,7 @@ public:
 		//zkontroluje zda je zadane pole volne
 	bool checkIfFree( int X, int Y)
 	{
-		//projde vsechny prvky a zkontroluje zda je nejsou na zadaném místì
+		//projde vsechny prvky a zkontroluje zda nejsou na zadaném místì
 		for(unsigned int i=0; i<this->items.size(); i++)
 		{
 			for(unsigned  int j=0; j<this->items[i].size(); j++)
@@ -224,9 +269,13 @@ public:
 		if (*stringIt=="q"||*stringIt=="k") return new figure(stringIt);	
 		if (*stringIt=="y") return new robot(stringIt);
 		if (*stringIt=="e") return new robot(stringIt);
-		if ((*stringIt).size()>1) return new tower(stringIt);
+		if (*stringIt=="s") return new Space();
+		if (*stringIt=="f") return new figure(stringIt);
+		if (*stringIt=="t") return new tower(stringIt);
+		
 		return NULL;
 	}
+		//naète stav z vstupního proudu
 	void loadFrom(istream &handle)
 	{
 		string line;
@@ -311,23 +360,30 @@ public:
 						cout<<"nacetl jsem cely vektor objektu"<<endl;
 					}
 					strs.clear();
+					
 				}
 				
 				handle.clear();
 			}
 			handle.close();
-		} else {
+			
+		} 
+		else 
+		{
 			cout << "There is no State file in current directory" << endl;
 		}
+		this->getConsistent();
 	}
 		//zakladni konstruktor stavu bez prvku
 	State(){
+		
 		value=0;
 		time=0; 
 		highestID=0;
 		highestGroupID=0;
 		numOfGroups=0;
 		numOfitems=0;
+		this->lastMoves=" ";
 	}
 		//kopirovaci konstruktor vytvori kopie vsech objektu ve stavu
 	State(const State &original)
@@ -338,6 +394,7 @@ public:
 		this->highestGroupID=original.highestGroupID;
 		this->numOfGroups=original.numOfGroups;
 		this->numOfitems=original.numOfitems;
+		this->lastMoves=original.lastMoves;
 		this->items.clear();
 		this->groups.clear();
 		for(unsigned int i=0; i<original.items.size(); i++)
@@ -368,6 +425,7 @@ public:
 		this->numOfitems=original.numOfitems;
 		this->items.clear();
 		this->groups.clear();
+		//this->lastMoves=original.lastMoves;
 		for(unsigned int i=0; i<original.items.size(); i++)
 		{
 			this->items.push_back(vector<Item*>());
@@ -440,11 +498,16 @@ public:
 			vector<Item*> newLine=( origState.ReturnGroup(stringPrototype[i]));	
 				//vlozi iterator na nalezenou skupinu prvku
 			orderedItems.push_back(vector<Item*>());
-			for(unsigned int i=0; i<newLine.size(); i++)
+			
+			for(unsigned int j=0; j<newLine.size(); j++)
 			{
-				if(this->usable(newLine[i],i) ){
-					(orderedItems.end()-1)->push_back(newLine[i]);
+
+				if(this->usable(newLine[j],i)==true )
+				{
+					(orderedItems.end()-1)->push_back(newLine[j]);
+				
 				}
+				
 			}
 
 			iterators.push_back((orderedItems.end()-1)->begin());

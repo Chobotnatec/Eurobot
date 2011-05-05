@@ -1,7 +1,40 @@
 #ifndef _CHESS_H_
 #define _CHESS_H_
 
+#define SPEED 2
 #include "state.h"
+
+#define TIME_FOR_FUNNY 3000
+#define EARLIEST_FUNNY 70000
+class Funny:public Move{
+public: 
+	int where_x;
+	int where_y;
+	Funny(string robot, string space,int x, int y )
+	{
+		this->stringPrototype.push_back(robot);
+		this->stringPrototype.push_back(space);
+		where_x=x;
+		where_y=y;
+	}
+	virtual bool usable(Item *item,unsigned int & order)
+	{
+		if(order==1)
+		{
+			if( static_cast<Space*>(item)->cargo!="p") return false;
+		}
+		return true;
+	}
+	virtual bool makeMove(vector<Item*> items,State &thatState){
+			//robot bude brát
+		if(thatState.time<EARLIEST_FUNNY) return false;
+		if(thatState.distance(items[0]->x,items[0]->y, where_x, where_y)*SPEED+thatState.time > 90000-TIME_FOR_FUNNY) return false;
+		thatState.reMoveItem(items[0]);
+		thatState.lastMoves=thatState.lastMoves+" Funny "+items[1]->name;
+		thatState.value=50;
+		return true;
+	}
+};
 class Take:public Move{
 public:
 	Take(string robot,string object,string space)
@@ -16,65 +49,47 @@ public:
 	{
 		if(order==2)
 		{
-			if( static_cast<Space*>(item)->pawnSpace==0) return false;
+				//prvek space je nepoužitelný pokud nemá místo pro pawn
+			if( static_cast<Space*>(item)->cargo=="ppf") return false;
+			if( static_cast<Space*>(item)->cargo=="pp") return false;
+
 		}
 		else if(order==1)
 		{
 			//ubdatovani pozice y
 			item->mmToY();
-			//zajimaji nas pouze objekty na chranenych plochach
+			//zajimaji nas pouze objekty na chranenych plochach posledni rade 
 			if (item->y==6 && item->valide==true);
 			else return true;
-			
+			//a to v místech chránìných ploch
 			item->mmToX();
 			if (item->x==2 || item->x==3 || item->x==6 || item->x==7) return false;
 			//
 		}
+		
 		return true;
 	}
 		//metoda vykonávající tah
 	virtual bool makeMove(vector<Item*> items,State &thatState)
 	{
 			//pokud je uz v zasobniku jeden pawn tak se da pouze nabrat dalsi
-		if (static_cast<Space*>(items[2])->pawnSpace==1)
-		{		//pokud ibjekt neni pawn tah je nepripustny
-			if (items[1]->name!="p") return false;
-				//pokud je pawn tak se snizi pocet mist pro pawny na 0
-			else static_cast<Space*>(items[2])->pawnSpace=0;
-		}
-			//pokud je v zasobiku pouze figura tak je mozno vzit jeden nebo dva pawny
-		else if( static_cast<Space*>(items[2])->figureSpace==false)
+		if (items[1]->name=="t")
 		{
-			if (items[1]->name=="p")
-			{
-				static_cast<Space*>(items[2])->pawnSpace=1;
-			}
-			else if (items[1]->name=="pp")
-			{
-				static_cast<Space*>(items[2])->pawnSpace=0; 
-			}
-			else return false;
+			static_cast<Space*>(items[2])->cargo=static_cast<tower*>(items[1])->tOfTower + static_cast<Space*>(items[2])->cargo;
 		}
-		else
+		else 
 		{
-			for ( unsigned int i=0; i<items[1]->name.size(); i++)
-			{
-				if (items[1]->name[i]=='p')
-				{
-					static_cast<Space*>(items[2])->pawnSpace--;
-				}
-				else if (items[1]->name[i]=='q')
-				{
-					static_cast<Space*>(items[2])->figureSpace=0;
-					break;
-				}
-				else if (items[1]->name[i]=='k')
-				{
-					static_cast<Space*>(items[2])->figureSpace=0;
-					break;
-				}
-			}
-		}	
+			static_cast<Space*>(items[2])->cargo=items[1]->name + static_cast<Space*>(items[2])->cargo;
+		}
+		if( static_cast<Space*>(items[2])->cargo == "p");
+		else if( static_cast<Space*>(items[2])->cargo == "pp");
+		else if( static_cast<Space*>(items[2])->cargo == "f");
+		else if( static_cast<Space*>(items[2])->cargo == "pf");
+		else if( static_cast<Space*>(items[2])->cargo == "ppf");
+		else return false;
+	
+		thatState.lastMoves=thatState.lastMoves+" take "+items[1]->name;//+(boost::str(boost::format("%1% %2%") % items[1]->x_mm % items[1]->y_mm));
+		
 			//vypocet trvani tahu;
 		int time=thatState.distance(items[0],items[1])*2;
 			//vypocet casove znamky noveho casu
@@ -106,6 +121,7 @@ public:
 	virtual bool makeMove(vector<Item*> items, State& thatState)
 	{
 		thatState.time+=1000;
+		//thatState.lastMoves=thatState.lastMoves+" w";
 		return true;
 	}
 };
@@ -115,10 +131,11 @@ public:
 		//metoda urcuje kdy se daný prvek bere v potaz
 	virtual bool usable(Item *item,unsigned int & order)
 	{
+		
 		if(order==1)
 		{
 			//ulozny prostor je nepozitelny pokud je  jsou dve mista pro pisky a jedno pro vezku
-			if( static_cast<Space*>(item)->pawnSpace==2 && static_cast<Space*>(item)->figureSpace==true) return false;
+			if( static_cast<Space*>(item)->cargo=="") return false;
 			
 		}
 		return true;
@@ -132,50 +149,19 @@ public:
 	}
 		//metoda vykoná tah takový ze vypusti vezku na zadané místo
 	virtual bool makeMove(vector<Item*> items, State& thatState)
-	{
+	{	
 			//vežka kterou robot vypustí
 		Item* newItem;
 			//rozhodnoutí jakou vezku robot vypustí
-			//pokud neni zadne misto jsou v robotovy dva pisci
-			//tak se urcitì vypusti vezka
-		if ( static_cast<Space*>(items[1])->pawnSpace==0 )
-		{	
-			newItem=new tower();
-				//rozhodnuti zda bude na vezce figura nebo ne
-			if( static_cast<Space*>(items[1])->figureSpace==false)
-			{
-				newItem->name="ppq";
-			}
-			else
-			{
-				newItem->name="pp";
-			}
-		}
-			//pokud neni v robotu zadny pisek tak se vypusti jen figura
-		else if ( static_cast<Space*>(items[1])->pawnSpace==2 )
-		{	
-				
-			newItem=new figure();
-			newItem->name="q";
-		}
-			//jinak je tedy v robotu jeden pisek 
-		else
-		{
-			if ( static_cast<Space*>(items[1])->figureSpace==false ) 
-			{
-				 newItem=new tower();
-				 newItem->name="pq";
-			}
-			else 
-			{
-				newItem=new pawn();
-				newItem->name="p";
-			}
-		}
+		if (static_cast<Space*>(items[1])->cargo=="p") newItem=new pawn();
+		else if(static_cast<Space*>(items[1])->cargo=="f") newItem= new figure();
+		else newItem=new tower( static_cast<Space*>(items[1])->cargo);
 		//urèení polohy nového prvku
 		if ( thatState.findFreeSpot( newItem->x,newItem->y, static_cast<robot*>(items[0]),'b') )
 		{
-			thatState.time=thatState.time+thatState.distance(items[0],newItem)*2;
+			thatState.time=thatState.time+1000;//thatState.distance(items[0],newItem)*2;
+			//cout<<thatState.distance(items[0],newItem);
+			
 			items[0]->x=newItem->x;
 			items[0]->x=newItem->y;
 			items[0]->xToMm();
@@ -184,6 +170,7 @@ public:
 			newItem->yToMm();
 
 
+		
 		}
 		else 
 		{
@@ -191,7 +178,12 @@ public:
 		}
 		thatState.addItem(newItem);
 		
+		thatState.lastMoves=thatState.lastMoves+" put";//+(boost::str(boost::format("%1% %2%") % newItem->x_mm % newItem->y_mm));
 		if(thatState.time>90000) return false;
+			//uvolnìní nákladu
+		static_cast<Space*>(items[1])->cargo="";
+		
+		
 		return true;		
 	}
 };

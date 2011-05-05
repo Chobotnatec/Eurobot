@@ -27,22 +27,17 @@ q 346 87
 k 98 88
 ppk 2725 1925 
 ******************************************************
+class Item
+property:
+	
+
+
+
+******************************************************
 class move
 vlastnosti:
-	-ze zadaného stavu nalezne všechny možnosti provedení tahu 
-	a v závyslosti na jejích vysledku vrátí nový stav
-	-obshahuje metody pro :
-		provedení  tahu na zadanou aplikaci
-		provedení tahu na všechny možné aplikace
-		vypoèítání èasové složitosti tahù
-		nalezení všech aplikací tahu
-		vrácení všech aplikací tahu
-	-informace 
-		odkazy na všechny možné následníky
-		zda byly následníci už nalezení 
+	
 		
-	
-	
 property:
 	vector<*state> newStates	//obsahuje odkazy na následníky stavu 
 	bool finded=false;			//zda probìhlo hledání možných aplikací
