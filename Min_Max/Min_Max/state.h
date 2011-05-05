@@ -550,7 +550,17 @@ public:
 			}
 				//nejnizsi iterator se inkrementuje s kazdou novou aplikaci
 			iterators[0]++;
-		}	
+		}
+		cout<<endl<<"FINDED APLICATIONS:"<<endl;
+		for(unsigned int i=0; i<output.size(); i++)
+		{ 
+			cout<<"APLICATION: "<<endl;
+			for( unsigned int j=0; j<output[i].size(); j++)
+			{
+				output[i][j]->writeOutItem();	
+			}
+			cout<<endl;
+		}
 			//vrat vysledny vektor aplikaci
 		return output;
 	};
