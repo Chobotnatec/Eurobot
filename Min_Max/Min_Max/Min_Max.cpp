@@ -13,7 +13,7 @@
 #include <cmath>
 #include "chess.h"
 #include "algorythm.h"
-#include "stateS.h"
+#include "server.h"
 
 using namespace std;
 	
