@@ -14,6 +14,7 @@
 #include "chess.h"
 #include "algorythm.h"
 #include "server.h"
+#include <sys/time.h>
 
 using namespace std;
 	
@@ -46,62 +47,69 @@ int main(int argc, char* argv[])
 	origState.writeOut();
 	cout<<"nacteno...";
 	
-		char buffer[256];
-	    State lastState=State();
-		State newState=State();
-		stringstream converter;
-		string converted;
-		const int socket=init_socket();
+	char buffer[256];
+	  State lastState=State();
+	State newState=State();
+	bool newS= false;
+	stringstream converter;
+	string converted;
+	const int socket=init_socket();
+	state_update(socket,"logic_online","true");
+
 	while(1)
 	{
 		
-		state_update(socket,"logic_online","true");
-		if (state_query(socket,"end",buffer)==0)
+		while(newS==false)
 		{
-			stringstream converter;
-			converter<<buffer;
-			converter>>converted;
-			if(converted=="true")
+			usleep(100000);
+			if (state_query(socket,"end",buffer)==0)
 			{
-			cout<<"konec programu"<<endl;
-			return 0;
+				stringstream converter;
+				converter<<buffer;
+				converter>>converted;
+				if(converted=="true")
+				{
+					cout<<"konec programu"<<endl;
+					return 0;
+				}
+			}
+
+		    if(state_query(socket,"isNewState",buffer)==0)
+			{
+				stringstream converter;
+				converter<<buffer;
+				converter>>converted;
+				if(converted=="true")
+				{
+					newS==true;
+				}
 			}
 		}
-
+			
+		state_update(socket,"isNewState","false");
 		if(state_query(socket,"newState",buffer)==0)
 		{
 			{
 			stringstream converter;
 			converter<<buffer;
+			newState.loadFrom(converter);
+			}
+			lastState= myAlgorythm.find(newState,9000);
+
+			state_update(socket,"cmd",lastState.cmd.c_str());
+			stringstream converter;
+			converter<<lastState.cmdX;
 			converter>>converted;
-			}
-			if(converted=="true")
-			{
-				state_update(socket,"isNewState","false");
-				if(state_query(socket,"newState",buffer)==0)
-				{
-					{
-					stringstream converter;
-					converter<<buffer;
-					newState.loadFrom(converter);
-					}
-					lastState= myAlgorythm.find(newState);
+			state_update(socket,"cmdX",converted.c_str());
 
-					state_update(socket,"cmd",lastState.cmd.c_str());
-					stringstream converter;
-					converter<<lastState.cmdX;
-					converter>>converted;
-					state_update(socket,"cmdX",converted.c_str());
-
-					converter<<lastState.cmdY;
-					converter>>converted;
-					state_update(socket,"cmdY",converted.c_str());
-
-
-				}
-
-			}
+			converter<<lastState.cmdY;
+			converter>>converted;
+			state_update(socket,"cmdY",converted.c_str());
+			state_update(socket,"newTask","true");
 		}
+
+	}
+}
 		
 
 		
@@ -117,6 +125,6 @@ int main(int argc, char* argv[])
 	
 		//outState.writeToFile("ostate.txt");
 		//cin>>konec;
-	}
-}
+	
+
 

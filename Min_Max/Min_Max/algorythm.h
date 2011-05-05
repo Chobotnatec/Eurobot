@@ -48,7 +48,7 @@ public:
 		return output;
 	}
 		//metoda vracející nejlepšího následníka
-	virtual State find( State& origState){
+	virtual State find( State& origState, int howFar){
 		return origState;
 	}
 
@@ -61,7 +61,7 @@ class basicSearchAlgorythm: public Algorythm{
 public:
 	int timeLimit;
 		//metoda vracející nejlepšího následníka
-	virtual State find( State& originalState){
+	virtual State find( State& originalState,int howFar){
 		highestEver=0;
 		string way;
 		cout<<"finding..."<<endl;
@@ -70,7 +70,7 @@ public:
 			//index naslednika s nejvyšším skore
 		int index=-1;
 			//do jak velke budoucnosti se má predikovat
-		this->timeLimit=originalState.time+MAX_TIME;
+		this->timeLimit=originalState.time+howFar//MAX_TIME;
 			//zajisteni ze se bude predikovat max do 90000ms
 		if(this->timeLimit>90000) this->timeLimit=90000;
 			//nalezeni nasledniku
